@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  loan_request: one
+  amount: 9.99
+  interest_rate: 9.99
+  approved_by: 1
+  interest_amount: 9.99
+  is_closed: false
+
+two:
+  loan_request: two
+  amount: 9.99
+  interest_rate: 9.99
+  approved_by: 1
+  interest_amount: 9.99
+  is_closed: false

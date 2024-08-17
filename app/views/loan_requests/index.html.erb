@@ -1,0 +1,33 @@
+<h1>Loan Requests</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Amount</th>
+    <th>Interest Rate</th>
+    <th>Requested At</th>
+    <th>Loan Status</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @loan_requests.each do |loan| %>
+    <tr>
+      <td><%= loan.amount %></td>
+      <td><%= loan.interest_rate %></td>
+      <td><%= loan.created_at.strftime('%D') %></td>
+      <td><%= loan.status.capitalize %></td>
+      <td><%= link_to 'View', loan %></td>
+      <% if loan.status == "requested"  %>
+        <td><%= link_to 'Edit', edit_loan_request_path(loan) %></td>
+        <td><%= button_to 'Delete', loan, method: :delete, data: { turbo_confirm: 'Are you sure?' } unless loan.status == "open" %></td>
+      <% end %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+
+<%= link_to 'New', new_loan_request_path %> |
+<%= link_to 'Back', root_path %>

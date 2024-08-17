@@ -1,0 +1,3 @@
+interest_calculate_every_5_minutes:
+  cron: "*/5 * * * *"
+  class: "CalculateInterestJob"

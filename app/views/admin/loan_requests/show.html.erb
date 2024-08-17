@@ -1,0 +1,58 @@
+<h3>Balance : <%= current_user.wallet.balance %></h3>
+
+<div>
+  <div><label> Name </label> : <%= @loan_request.user.full_name %></div>
+  <div><label> Requested Amount </label> : <%= @loan_request.amount %> Rs.</div>
+  <div><label> Requested Interest Rate </label> : <%= @loan_request.interest_rate %>%</div>
+  <div><label> Requested At </label> : <%= @loan_request.created_at %></div>
+  <div><label> Loan Status </label> : <%= @loan_request.status.capitalize %></div>
+  <div><label> Note </label> : <%= @loan_request.loan_request_logs.last.note %></div>
+  <% if @loan_request.approved? %>
+    <div><label> Approved At </label> : <%= @loan_request.loan_request_logs.last.created_at %></div>
+    <div><label> Approved By </label> : <%= @loan_request.loan_request_logs.last.user.full_name %></div>
+  <% elsif @loan_request.waiting_for_adjustment_acceptance? or @loan_request.readjustment_requested?  %>
+    <br/>
+    <br/>
+    <div><label> Adjusted Amount </label> : <%= @loan_request.loan_request_logs.last.amount %> Rs.</div>
+    <div><label> Adjusted Interest Rate </label> : <%= @loan_request.loan_request_logs.last.interest_rate %>%</div>
+    <div><label> Adjusted At </label> : <%= @loan_request.loan_request_logs.last.created_at %></div>
+    <div><label> Adjusted By </label> : <%= @loan_request.loan_request_logs.last.user.full_name %></div>
+  <% elsif @loan_request.open? %>
+    <div><b><label> Approved Amount </label> : <%= @loan_request.approved_loan.amount %> Rs.</b></div>
+    <div><b><label> Approved Interest Rate </label> : <%= @loan_request.approved_loan.interest_rate %>%</b></div>
+    <h3>Total Loan Amount : <%= @loan_request.amount + @loan_request.approved_loan.interest_amount %> Rs.</h3>
+  <% end %>
+  <h4>Loan Request History</h4>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Amount</th>
+      <th>Interest Rate</th>
+      <th>Date</th>
+      <th>Loan Status</th>
+      <th>Note</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @loan_request_logs.each do |loan| %>
+      <tr>
+        <td><%= loan.amount %></td>
+        <td><%= loan.interest_rate %></td>
+        <td><%= loan.created_at.strftime('%D') %></td>
+        <td><%= loan.status.capitalize %></td>
+        <td><%= loan.note %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<br/>
+<%  if @loan_request.status == 'requested' or @loan_request.status == 'readjustment_requested' %>
+  <%= button_to 'Approve', approve_admin_loan_request_path(@loan_request), method: :patch, data: { turbo_confirm: 'Are you sure?' } %>
+  <%= button_to 'Reject', reject_admin_loan_request_path(@loan_request), method: :patch, data: { turbo_confirm: 'Are you sure?' } %>
+  <%= link_to 'Adjust', adjust_admin_loan_request_path(@loan_request) %>
+<% end %>
+
+<%= link_to 'Back', root_path %>

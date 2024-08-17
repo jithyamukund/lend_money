@@ -1,0 +1,29 @@
+<h1>Loan Requests</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Amount</th>
+    <th>Interest Rate</th>
+    <th>Requested At</th>
+    <th>Loan Status</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @loan_requests.each do |loan| %>
+    <tr>
+      <td><%= loan.user.full_name %></td>
+      <td><%= loan.amount %></td>
+      <td><%= loan.interest_rate %></td>
+      <td><%= loan.created_at.strftime('%D') %></td>
+      <td><%= loan.status.capitalize %></td>
+      <td><%= link_to 'View', admin_loan_request_path(loan) %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+
+<%= link_to 'Back', root_path %>

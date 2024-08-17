@@ -1,5 +1,20 @@
 <% if user_signed_in? %>
   <p>Welcome, <%= current_user.email %></p>
+
+  <div>
+    <% if current_user.admin? %>
+      <div>
+        <%= link_to "Loan Requests", admin_loan_requests_path %>
+      </div>
+    <% else %>
+      <div>
+        <%= link_to "Request Loan", new_loan_request_path %> |
+        <%= link_to "Loan Details", loan_requests_path %>
+      </div>
+    <% end %>
+
+  </div>
+
   <%= button_to 'Sign out', destroy_user_session_path, method: :delete %>
 <% else %>
   <%= button_to 'Sign up', new_user_registration_path, method: :get %><br/>
